@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Upcoming Movies (Strategy Pattern)</title>
+    <style>
+        :root {
+            --bg: #f7f7f8;
+            --text: #111827;
+            --muted: #6b7280;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --link: #1f2937;
+            --accent: #2563eb;
+
+            --rating-bg: #ecfdf5;   
+            --rating-fg: #065f46;
+            --rating-br: #a7f3d0;
+
+            --pop-bg: #eef2ff;      
+            --pop-fg: #3730a3;
+            --pop-br: #c7d2fe;
+        }
+
+        html, body { height: 100%; }
+        body {
+            font-family: system-ui, Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            margin: 2rem auto;
+            max-width: 900px;
+            line-height: 1.5;
+        }
+
+        header {
+            display:flex; align-items:baseline; gap:1rem;
+            padding-bottom: .5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        h1 { margin: 0; font-size: 1.6rem; font-weight: 700; }
+        .tags { font-size: .9rem; color: var(--muted); }
+
+        .sort {
+            margin: 1rem 0;
+            display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+        }
+        .sort::before {
+            content: "Sort by:"; color: var(--muted); margin-right: .25rem; font-size: .92rem;
+        }
+
+        a.sort-link {
+            text-decoration: none; color: var(--link);
+            border: 1px solid var(--border); background: var(--card);
+            padding: .35rem .6rem; border-radius: 999px; font-size: .92rem;
+            transition: background .15s ease, color .15s ease, border-color .15s ease, transform .05s ease;
+        }
+        a.sort-link:hover, a.sort-link:focus-visible {
+            background: #000; color: #fff; border-color: #000; text-decoration: none; transform: translateY(-1px);
+        }
+        .active {
+            font-weight: 600; text-decoration: none;
+            border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+            color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card));
+        }
+
+        .movie {
+            padding: 1rem; border: 1px solid var(--border); border-radius: 12px;
+            background: var(--card); margin-bottom: .75rem;
+            border-left: 4px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+        }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: .4rem;
+            padding: .18rem .5rem; border-radius: 999px; font-size: .85rem;
+            line-height: 1; border: 1px solid transparent; white-space: nowrap;
+        }
+        .badge-label { opacity: .9; }
+        .badge-rating { background: var(--rating-bg); color: var(--rating-fg); border-color: var(--rating-br); }
+        .badge-pop { background: var(--pop-bg); color: var(--pop-fg); border-color: var(--pop-br); }
+
+        .accent-rule {
+            height: 3px;
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 70%, transparent), transparent);
+            border: 0; margin: .75rem 0 0;
+        }
+
+        p { margin: 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1> Upcoming Movies</h1>
+        <span class="tags">Powered by the Strategy Pattern</span>
+    </header>
+    <hr class="accent-rule"/>
+
+    <div class="sort">
+        <a class="sort-link {% if active_sort == 'date' %}active{% endif %}" href="?sort=date">Release Date</a>
+        <a class="sort-link {% if active_sort == 'rating' %}active{% endif %}" href="?sort=rating">Rating</a>
+        <a class="sort-link {% if active_sort == 'popularity' %}active{% endif %}" href="?sort=popularity">Popularity</a>
+        <a class="sort-link {% if active_sort == 'title' %}active{% endif %}" href="?sort=title">Title (A–Z)</a>
+    </div>
+
+    {% for m in movies %}
+    <div class="movie">
+        <strong>{{ m.title }}</strong><br/>
+        <span class="tags">
+            Release: {{ m.release_date }} -
+            <span class="badge badge-rating"><span class="badge-label">Rating:</span> {{ m.rating }}</span> -
+            <span class="badge badge-pop"><span class="badge-label">Popularity:</span> {{ m.popularity }}</span>
+        </span>
+    </div>
+    {% empty %}
+    <p>No upcoming movies yet.</p>
+    {% endfor %}
+</body>
+</html>
